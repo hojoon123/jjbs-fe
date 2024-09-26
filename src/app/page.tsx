@@ -1,101 +1,72 @@
-import Image from "next/image";
+import CategoryShowcase from '@/components/CategoryShowcase'
+import ProductCard from '@/components/ProductCard'
+import { Product } from '@/types/product'
 
-export default function Home() {
+const categories = [
+  {
+    id: 'home-interior',
+    name: '가구/홈인테리어',
+    description: '우리집 분위기 바꾸기! 아토젯 샤워기',
+    image: '/placeholder.svg?height=400&width=600',
+    products: [
+      { id: 1, name: '아토젯 샤워기', price: 26910, image: '/placeholder.svg?height=100&width=100', promotion: '로켓배송' },
+      { id: 2, name: '스테론 우아수스 스테인리스 자동센서 휴지통', price: 47310, image: '/placeholder.svg?height=100&width=100', promotion: '특가' },
+      { id: 3, name: '욕실 청소 브러쉬', price: 12980, image: '/placeholder.svg?height=100&width=100', promotion: '로켓배송' },
+      { id: 4, name: '스파이더락 무타공 샤워선반', price: 13900, image: '/placeholder.svg?height=100&width=100', promotion: '로켓배송' },
+    ],
+    keywords: ['욕실용품', '수납/정리', '리빙박스', '팬티랙', '욕실화', '욕실소품'],
+  },
+  {
+    id: 'food',
+    name: '식품',
+    description: '신선한 식재료부터 간편식까지',
+    image: '/placeholder.svg?height=400&width=600',
+    products: [
+      { id: 5, name: '햇반 즉석밥', price: 15900, image: '/placeholder.svg?height=100&width=100', promotion: '로켓배송' },
+      { id: 6, name: '동원 참치캔', price: 12000, image: '/placeholder.svg?height=100&width=100', promotion: '특가' },
+      { id: 7, name: '농심 신라면', price: 4980, image: '/placeholder.svg?height=100&width=100', promotion: '로켓배송' },
+      { id: 8, name: '맛있는 우유', price: 3200, image: '/placeholder.svg?height=100&width=100', promotion: '로켓프레시' },
+    ],
+    keywords: ['과일', '채소', '육류', '생선', '간식', '음료'],
+  },
+  // 다른 카테고리들도 비슷한 형식으로 추가...
+]
+
+async function getTopProducts(): Promise<Product[]> {
+  // 실제 API 호출로 대체해야 합니다.
+  return [
+    { id: 1, name: '인기 상품 1', price: 10000, main_image_url: '/placeholder.svg?height=200&width=200' },
+    { id: 2, name: '인기 상품 2', price: 20000, main_image_url: '/placeholder.svg?height=200&width=200' },
+    { id: 3, name: '인기 상품 3', price: 30000, main_image_url: '/placeholder.svg?height=200&width=200' },
+    { id: 4, name: '인기 상품 4', price: 40000, main_image_url: '/placeholder.svg?height=200&width=200' },
+    { id: 5, name: '인기 상품 5', price: 50000, main_image_url: '/placeholder.svg?height=200&width=200' },
+    { id: 6, name: '인기 상품 6', price: 60000, main_image_url: '/placeholder.svg?height=200&width=200' },
+  ]
+}
+
+export default async function Home() {
+  const topProducts = await getTopProducts()
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    
+    <div className="container mx-auto px-4 py-8">
+      <section className="mb-8">
+      <h2 className="text-3xl font-bold mb-8">카테고리 쇼케이스</h2>
+      <div className="space-y-12">
+        {categories.map((category) => (
+          <CategoryShowcase key={category.id} category={category} />
+        ))}
+      </div>
+      </section>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <section>
+        <h2 className="text-2xl font-bold mb-4">인기 상품</h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {topProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
     </div>
-  );
+  )
 }
