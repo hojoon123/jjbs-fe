@@ -1,11 +1,42 @@
+// src/components/LoginForm.tsx
+
 'use client'
 
 import { Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { useAuth } from '../hooks/useAuth'
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false)
+  const [formData, setFormData] = useState({
+    username: '',
+    password: ''
+  })
+  const [error, setError] = useState('')
+  const router = useRouter()
+  const { login } = useAuth()
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setError('')
+
+    try {
+      await login(formData.username, formData.password)
+      router.push('/')
+    } catch (error) {
+      setError('로그인 중 오류가 발생했습니다.')
+    }
+  }
 
   return (
     <div className="max-w-md mx-auto">
@@ -13,22 +44,24 @@ export default function LoginForm() {
       <p className="text-center mb-6 text-gray-600">
         로그인하여 향상된 쇼핑 경험을 누려보세요.
       </p>
-      <form className="space-y-4">
+      {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="email" className="sr-only">
-            이메일
+          <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+            아이디
           </label>
           <input
-            id="email"
-            name="email"
-            type="email"
+            id="username"
+            name="username"
+            type="text"
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            placeholder="이메일"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300"
+            value={formData.username}
+            onChange={handleChange}
           />
         </div>
         <div className="relative">
-          <label htmlFor="password" className="sr-only">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
             비밀번호
           </label>
           <input
@@ -36,8 +69,9 @@ export default function LoginForm() {
             name="password"
             type={showPassword ? 'text' : 'password'}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            placeholder="비밀번호"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300"
+            value={formData.password}
+            onChange={handleChange}
           />
           <button
             type="button"

@@ -1,4 +1,4 @@
-import { Product } from '@/types/product'
+import { Product } from '@/services/types/product'
 import Image from 'next/image'
 import Link from 'next/link'
 

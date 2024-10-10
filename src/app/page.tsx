@@ -1,6 +1,6 @@
 import CategoryShowcase from '@/components/CategoryShowcase'
 import ProductCard from '@/components/ProductCard'
-import { Product } from '@/types/product'
+import { Product } from '@/services/types/product'
 
 const categories = [
   {

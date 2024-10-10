@@ -1,23 +1,39 @@
+// src/components/mypage/profile/EditProfileForm.tsx
 'use client'
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useState } from 'react'
+import { api } from '@/services/api/api'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
-interface EditProfileFormProps {
-  initialName: string;
-  initialEmail: string;
-}
+export function EditProfileForm() {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const router = useRouter()
 
-export function EditProfileForm({ initialName, initialEmail }: EditProfileFormProps) {
-  const [name, setName] = useState(initialName)
-  const [email, setEmail] = useState(initialEmail)
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const data = await api.getUserProfile();
+        setName(data.username);
+        setEmail(data.email);
+      } catch (error) {
+        console.error('Failed to fetch profile:', error);
+      }
+    };
+    fetchProfile();
+  }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // 여기에 프로필 업데이트 로직 추가
-    console.log('Profile updated:', { name, email })
+    try {
+      await api.updateUserProfile({ username: name, email: email });
+      router.push('/users/profile');
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+    }
   }
 
   return (

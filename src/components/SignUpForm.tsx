@@ -1,8 +1,12 @@
+// src/components/SignUpForm.tsx
+
 'use client'
 
 import { Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { useAuth } from '../hooks/useAuth'
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false)
@@ -13,6 +17,9 @@ export default function SignUpForm() {
     email: '',
     password: ''
   })
+  const [error, setError] = useState('')
+  const router = useRouter()
+  const { register } = useAuth()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -24,14 +31,20 @@ export default function SignUpForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // Here you would typically send the formData to your server
-    console.log('Form submitted:', formData)
-    // Add your API call here
+    setError('')
+
+    try {
+      await register(formData)
+      router.push('/users/login')
+    } catch (error) {
+      setError('회원가입 중 오류가 발생했습니다.')
+    }
   }
 
   return (
     <div className="max-w-md mx-auto">
       <h1 className="text-2xl font-bold text-center mb-6">회원가입</h1>
+      {error && <p className="text-red-500 text-center mb-4">{error}</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -65,7 +78,7 @@ export default function SignUpForm() {
         </div>
         <div>
           <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
-            사용자 이름
+            아이디
           </label>
           <input
             id="username"

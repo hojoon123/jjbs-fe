@@ -1,4 +1,4 @@
-import { Product } from '@/types/product'
+import { Product } from '@/services/types/product'
 import ProductCard from './ProductCard'
 
 async function getCategoryProducts(categoryId: string): Promise<Product[]> {
