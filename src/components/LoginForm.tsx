@@ -6,7 +6,6 @@ import { Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { useAuth } from '../hooks/useAuth'
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false)
@@ -16,7 +15,6 @@ export default function LoginForm() {
   })
   const [error, setError] = useState('')
   const router = useRouter()
-  const { login } = useAuth()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -27,14 +25,28 @@ export default function LoginForm() {
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setError('')
-
+    e.preventDefault();
+    setError('');
     try {
-      await login(formData.username, formData.password)
-      router.push('/')
+        const response = await fetch('http://localhost:8000/users/login/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: formData.username,
+                password: formData.password
+            }),
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            throw new Error('로그인 실패');
+        }
+
+        router.push('/');  // 로그인 성공 후 홈으로 리다이렉트
     } catch (error) {
-      setError('로그인 중 오류가 발생했습니다.')
+        setError('로그인 중 오류가 발생했습니다.');
     }
   }
 

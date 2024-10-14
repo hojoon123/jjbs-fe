@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import ClientLayout from '../components/ClientLayout';
 import Header from '../components/Header';
+import { checkAndRefreshToken } from '../services/utils/utils';
 import '../styles/globals.css';
 
 export const metadata: Metadata = {
@@ -8,16 +9,18 @@ export const metadata: Metadata = {
   description: 'JUNJUN 온라인 쇼핑몰',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const accessToken = await checkAndRefreshToken();
+  let isLoggedIn = !!accessToken;
   return (
     <html lang="ko">
       <body>
         <div className="flex flex-col min-h-screen">
-          <Header />
+          <Header isLoggedIn={isLoggedIn} />
           <ClientLayout>
             {children}
           </ClientLayout>

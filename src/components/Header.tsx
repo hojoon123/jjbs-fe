@@ -1,16 +1,14 @@
 // src/components/Header.tsx
 
-'use client'
+'use client';
 
-import { LogOut, Menu, Search, ShoppingCart, User } from 'lucide-react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { useAuth } from '../hooks/useAuth'
+import { LogOut, Menu, Search, ShoppingCart, User } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
-export default function Header() {
+export default function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { isLoggedIn, logout } = useAuth();
   const router = useRouter()
 
   const categories = [
@@ -20,13 +18,9 @@ export default function Header() {
   ]
 
   const handleLogout = async () => {
-    try {
-      await logout()
-      router.push('/')
-    } catch (error) {
-      console.error('로그아웃 실패:', error)
-    }
-  }
+    // 로그아웃 페이지로 리다이렉트
+    router.push('/users/logout/');
+  };
 
   return (
     <header className="border-b relative z-50">

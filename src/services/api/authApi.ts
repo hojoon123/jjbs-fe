@@ -1,8 +1,6 @@
-import { fetchWithToken } from '../utils/utils';
-
 export const authApi = {
   login: async (username: string, password: string) => {
-    const response = await fetch('http://localhost:8000/users/login/', {
+    const response = await fetch('https://5138-222-102-164-25.ngrok-free.app/users/login/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -19,6 +17,18 @@ export const authApi = {
   },
 
   logout: async () => {
-    return await fetchWithToken('http://localhost:8000/users/logout/', 'POST');
+    const response = await fetch('https://5138-222-102-164-25.ngrok-free.app/users/logout/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',  // 쿠키를 함께 전송
+    });
+
+    if (!response.ok) {
+      throw new Error(`로그아웃 실패: ${response.status}`);
+    }
+
+    return response.json();  // 서버 응답 처리
   }
 };
