@@ -6,7 +6,7 @@ import { Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { useAuth } from '../hooks/useAuth'
+import { authApi } from '../services/api/authApi'
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false)
@@ -19,7 +19,6 @@ export default function SignUpForm() {
   })
   const [error, setError] = useState('')
   const router = useRouter()
-  const { register } = useAuth()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -32,12 +31,12 @@ export default function SignUpForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError('')
-
     try {
-      await register(formData)
-      router.push('/users/login')
-    } catch (error) {
-      setError('회원가입 중 오류가 발생했습니다.')
+      await authApi.signUp(formData)
+      alert('회원가입 성공!')
+      router.push('/users/login/')
+    } catch (err) {
+      setError('회원가입에 실패했습니다. 다시 시도해 주세요.')
     }
   }
 

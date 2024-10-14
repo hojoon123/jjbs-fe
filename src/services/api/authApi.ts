@@ -1,6 +1,25 @@
+import { UserData } from '../types/userData'; // 타입을 불러옴
+const BASE_URL = 'https://5138-222-102-164-25.ngrok-free.app';
+
 export const authApi = {
+  signUp: async (userData: UserData) => {
+    const response = await fetch(`${BASE_URL}/users/signup/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    });
+
+    if (!response.ok) {
+      throw new Error('회원가입 실패');
+    }
+
+    return response.json(); // 서버 응답 처리
+  },
+
   login: async (username: string, password: string) => {
-    const response = await fetch('https://5138-222-102-164-25.ngrok-free.app/users/login/', {
+    const response = await fetch(`${BASE_URL}/users/login/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -17,7 +36,7 @@ export const authApi = {
   },
 
   logout: async () => {
-    const response = await fetch('https://5138-222-102-164-25.ngrok-free.app/users/logout/', {
+    const response = await fetch(`${BASE_URL}/users/logout/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
