@@ -1,5 +1,3 @@
-// src/components/SignUpForm.tsx
-
 'use client'
 
 import { Eye, EyeOff } from 'lucide-react'
