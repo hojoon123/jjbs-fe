@@ -1,6 +1,6 @@
 import { fetchWithToken } from '../utils/clientUtils';
 
-const BASE_URL = 'https://5138-222-102-164-25.ngrok-free.app';
+const BASE_URL = 'https://3618-61-84-218-100.ngrok-free.app';
   
 export const productApi =  {
     // 상품 상세 조회 API

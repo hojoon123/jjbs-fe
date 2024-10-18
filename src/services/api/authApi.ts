@@ -1,5 +1,5 @@
 import { signUpData } from '../types/userData'; // 타입을 불러옴
-const BASE_URL = 'https://5138-222-102-164-25.ngrok-free.app';
+const BASE_URL = 'https://3618-61-84-218-100.ngrok-free.app';
 
 export const authApi = {
   signUp: async (userData: signUpData) => {
