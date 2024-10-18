@@ -2,53 +2,52 @@
 
 'use client'
 
-import { Eye, EyeOff } from 'lucide-react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { Eye, EyeOff } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../redux/slices/userSlice';
+import { authApi } from '../services/api/authApi';
+import { userApi } from '../services/api/userApi';
 
 export default function LoginForm() {
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
     password: ''
-  })
-  const [error, setError] = useState('')
-  const router = useRouter()
+  });
+  const [error, setError] = useState('');
+  const router = useRouter();
+  const dispatch = useDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData(prevState => ({
       ...prevState,
       [name]: value
-    }))
-  }
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
     try {
-        const response = await fetch('http://localhost:8000/users/login/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: formData.username,
-                password: formData.password
-            }),
-            credentials: 'include',
-        });
-
-        if (!response.ok) {
-            throw new Error('로그인 실패');
-        }
-
-        router.push('/');  // 로그인 성공 후 홈으로 리다이렉트
+      const loginResponse = await authApi.login(formData.username, formData.password);
+      if (!loginResponse) {
+        setError('아이디 비밀번호를 확인해주세요.');
+        return;
+      }
+      // 로그인 성공 후 유저 데이터 조회
+      const userProfile = await userApi.getUserProfile();
+      
+      // Redux 상태 업데이트
+      dispatch(setUser(userProfile));
+      router.push('/');  // 로그인 성공 후 홈으로 리다이렉트
     } catch (error) {
-        setError('로그인 중 오류가 발생했습니다.');
+      setError('유저 조회에 실패했습니다.');
     }
-  }
+  };
 
   return (
     <div className="max-w-md mx-auto">
@@ -111,5 +110,5 @@ export default function LoginForm() {
         </Link>
       </p>
     </div>
-  )
+  );
 }

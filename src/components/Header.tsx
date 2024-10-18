@@ -1,15 +1,17 @@
-// src/components/Header.tsx
-
 'use client';
 
+import { clearUser } from '@/redux/slices/userSlice';
+import { RootState } from '@/redux/store';
 import { LogOut, Menu, Search, ShoppingCart, User } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { authApi } from '../services/api/authApi';
 
-export default function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
+export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const router = useRouter()
+  const user = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
 
   const categories = [
     "패션의류/잡화", "뷰티", "출산/유아동", "식품", "주방용품", "생활용품",
@@ -18,8 +20,13 @@ export default function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
   ]
 
   const handleLogout = async () => {
-    // 로그아웃 페이지로 리다이렉트
-    router.push('/users/logout/');
+    try {
+      await authApi.logout();
+      dispatch(clearUser());
+      alert('로그아웃되었습니다.');
+    } catch (error) {
+      console.error('로그아웃 실패:', error);
+    }
   };
 
   return (
@@ -27,7 +34,7 @@ export default function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
       <div className="container mx-auto px-4 py-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <button 
+            <button
               className="p-2 bg-black-200 text-black rounded-md flex items-center"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
@@ -49,11 +56,11 @@ export default function Header({ isLoggedIn }: { isLoggedIn: boolean }) {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            {isLoggedIn ? (
+            {user.isAuthenticated ? (
               <>
                 <Link href="/users/profile" className="flex items-center text-sm">
                   <User className="h-5 w-5 mr-1" />
-                  <span>내정보</span>
+                  <span>{user.first_name}{user.last_name}</span>
                 </Link>
                 <button onClick={handleLogout} className="flex items-center text-sm">
                   <LogOut className="h-5 w-5 mr-1" />

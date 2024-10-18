@@ -1,38 +1,26 @@
 'use client'
 
+import { reviewsApi } from '@/services/api/reviewsApi'
+import { ProductDetail as ProductDetailType } from '@/services/types/product'
+import { Review } from '@/services/types/reviews'
 import { motion } from 'framer-motion'
 import { Truck } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { ProductImages } from './product/ProductImages'
 import { ProductInfo } from './product/ProductInfo'
 import { ProductOptions } from './product/ProductOptions'
+import { ProductReview } from './product/ProductReview'
 
 interface ProductDetailProps {
-  product: {
-    id: number
-    name: string
-    price: number
-    originalPrice: number
-    discount: number
-    images: string[]
-    options: string[]
-    description: string
-    details: string
-    shippingInfo?: string
-    reviews: Array<{
-      id: number
-      user: string
-      rating: number
-      date: string
-      content: string
-    }>
-  }
+  product: ProductDetailType;
 }
 
 export default function ProductDetail({ product }: ProductDetailProps) {
   const [tempItems, setTempItems] = useState<Array<{ option: string; quantity: number }>>([])
+  const [selectedOption, setSelectedOption] = useState<{ name: string, additional_price: number }>({ name: '', additional_price: 0 });
   const [activeTab, setActiveTab] = useState('상세정보')
   const [isTabsSticky, setIsTabsSticky] = useState(false)
+  const [reviews, setReviews] = useState<Review[]>([]);
   
   const tabsRef = useRef<HTMLDivElement>(null)
   const tabsWrapperRef = useRef<HTMLDivElement>(null)
@@ -41,17 +29,27 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const reviewsRef = useRef<HTMLDivElement>(null)
   const qnaRef = useRef<HTMLDivElement>(null)
 
-  const handleAddToTemp = (option: string, quantity: number) => {
-    setTempItems([...tempItems, { option, quantity }])
-  }
+  const handleAddToTemp = (option: { name: string, additional_price: number }, quantity: number) => {
+    setSelectedOption(option);  // 옵션을 선택할 때 상태 업데이트
+    setTempItems([...tempItems, { option: option.name, quantity }]);
+  };
 
   const handleRemoveFromTemp = (index: number) => {
-    setTempItems(tempItems.filter((_, i) => i !== index))
-  }
+    setTempItems(tempItems.filter((_, i) => i !== index));
+  };
 
   const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
     ref.current?.scrollIntoView({ behavior: 'smooth' })
   }
+
+  useEffect(() => {
+    async function fetchReviews() {
+      const response = await reviewsApi.getProductReviews(product.id);
+      setReviews(response.reviews);  // API에서 받아온 데이터를 상태로 설정
+    }
+
+    fetchReviews();
+  }, [product.id]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -81,14 +79,15 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           <ProductInfo 
             name={product.name}
             price={product.price}
-            originalPrice={product.originalPrice}
-            discount={product.discount}
+            salesCount={product.sales_count}
             rating={4}
-            reviewCount={product.reviews.length}
+            reviewCount={product.view_count}
             description={product.description}
+            selectedOption={selectedOption}
           />
 
           <ProductOptions 
+            productId={product.id}
             options={product.options}
             onAddToTemp={handleAddToTemp}
             onRemoveFromTemp={handleRemoveFromTemp}
@@ -148,14 +147,14 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
         <div ref={detailsRef} className="mt-8">
           <h2 className="text-2xl font-bold mb-4">상세정보</h2>
-          <div dangerouslySetInnerHTML={{ __html: product.details }} />
+          <div dangerouslySetInnerHTML={{ __html: product.description }} />
         </div>
 
         <div ref={shippingRef} className="mt-16">
           <h2 className="text-2xl font-bold mb-4">배송/환불</h2>
           {product.shippingInfo ? (
             <ul>
-              {product.shippingInfo.split('\n').map((item, index) => (
+              {product.shippingInfo.split('\n').map((item: string, index: number) => (
                 <li key={index}>{item}</li>
               ))}
             </ul>
@@ -164,21 +163,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           )}
         </div>
 
-        <div ref={reviewsRef} className="mt-16">
-          <h2 className="text-2xl font-bold mb-4">상품평</h2>
-          {product.reviews.map((review) => (
-            <div key={review.id} className="mb-4 pb-4 border-b last:border-b-0">
-              <div className="flex justify-between items-center mb-2">
-                <span className="font-semibold">{review.user}</span>
-                <div className="flex items-center">
-                  {/* Implement renderStars function here */}
-                  <span className="ml-2 text-sm text-gray-600">{review.date}</span>
-                </div>
-              </div>
-              <p>{review.content}</p>
-            </div>
-          ))}
-        </div>
+        <ProductReview reviews={reviews} />
 
         <div ref={qnaRef} className="mt-16">
           <h2 className="text-2xl font-bold mb-4">Q&A</h2>

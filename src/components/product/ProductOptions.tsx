@@ -1,38 +1,51 @@
-import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Minus, Plus, X } from 'lucide-react'
-import { useState } from 'react'
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { productApi } from '@/services/api/productApi';
+import { ProductOptionsProps } from '@/services/types/product';
+import { Minus, Plus, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
-interface ProductOptionsProps {
-  options: string[]
-  onAddToTemp: (option: string, quantity: number) => void
-  onRemoveFromTemp: (index: number) => void
-  tempItems: Array<{ option: string; quantity: number }>
-}
+export function ProductOptions({ productId, onAddToTemp, onRemoveFromTemp, tempItems }: ProductOptionsProps) {
+  const [options, setOptions] = useState<Array<{ id: number; name: string; additional_price: number }>>([]);
+  const [selectedOption, setSelectedOption] = useState<{ name: string; additional_price: number }>({ name: '', additional_price: 0 });
+  const [quantity, setQuantity] = useState(1);
 
-export function ProductOptions({ options, onAddToTemp, onRemoveFromTemp, tempItems }: ProductOptionsProps) {
-  const [selectedOption, setSelectedOption] = useState(options[0])
-  const [quantity, setQuantity] = useState(1)
+  // 상품 옵션 불러오기
+  useEffect(() => {
+    const fetchProductOptions = async () => {
+      try {
+        const fetchedOptions = await productApi.getProductOptions(productId);
+        setOptions(fetchedOptions);
+        setSelectedOption(fetchedOptions[0]); // 기본 선택값 설정
+      } catch (error) {
+        console.error('Failed to fetch product options:', error);
+      }
+    };
+    fetchProductOptions();
+  }, [productId]);
 
   const handleAddToTemp = () => {
-    onAddToTemp(selectedOption, quantity)
-    setQuantity(1)
-  }
+    onAddToTemp(selectedOption, quantity);
+    setQuantity(1);
+  };
 
   return (
     <div className="mt-6">
-      <Select defaultValue={options[0]} onValueChange={(value) => setSelectedOption(value)}>
+      <Select 
+        defaultValue={selectedOption.name} 
+        onValueChange={(value) => setSelectedOption(options.find(opt => opt.name === value) || { name: '', additional_price: 0 })}
+      >
         <SelectTrigger className="w-full">
           <SelectValue />
         </SelectTrigger>
         <SelectContent className="bg-white">
           {options.map((option) => (
             <SelectItem 
-              key={option} 
-              value={option}
+              key={option.id} 
+              value={option.name} 
               className="hover:bg-gray-100 transition-colors duration-150"
             >
-              {option}
+              {option.name} (+{option.additional_price}원)
             </SelectItem>
           ))}
         </SelectContent>
@@ -41,7 +54,6 @@ export function ProductOptions({ options, onAddToTemp, onRemoveFromTemp, tempIte
       <div className="mt-4 flex items-center">
         <Button
           variant="outline"
-          size="icon"
           onClick={() => setQuantity(Math.max(1, quantity - 1))}
           className="hover:bg-gray-100 transition-colors duration-150"
         >
@@ -50,7 +62,6 @@ export function ProductOptions({ options, onAddToTemp, onRemoveFromTemp, tempIte
         <span className="mx-4 w-8 text-center">{quantity}</span>
         <Button
           variant="outline"
-          size="icon"
           onClick={() => setQuantity(quantity + 1)}
           className="hover:bg-gray-100 transition-colors duration-150"
         >
@@ -73,7 +84,6 @@ export function ProductOptions({ options, onAddToTemp, onRemoveFromTemp, tempIte
                 <span>{item.option} - {item.quantity}개</span>
                 <Button 
                   variant="ghost" 
-                  size="icon" 
                   onClick={() => onRemoveFromTemp(index)}
                   className="hover:bg-gray-100 transition-colors duration-150"
                 >
@@ -100,5 +110,5 @@ export function ProductOptions({ options, onAddToTemp, onRemoveFromTemp, tempIte
         </Button>
       </div>
     </div>
-  )
+  );
 }

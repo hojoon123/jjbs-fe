@@ -49,7 +49,7 @@ export function CartList({ initialItems }: CartListProps) {
               className="w-16 text-center"
               min="1"
             />
-            <Button variant="ghost" size="icon" className="ml-2" onClick={() => handleRemoveItem(item.id)}>
+            <Button variant="ghost" className="ml-2" onClick={() => handleRemoveItem(item.id)}>
               <Trash2 className="h-4 w-4" />
             </Button>
           </div>

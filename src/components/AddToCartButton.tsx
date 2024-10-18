@@ -1,17 +1,29 @@
 'use client'
 
-import { useState } from 'react'
+import { useState } from 'react';
+import { cartApi } from '../services/api/cartApi';
 
-export default function AddToCartButton({ productId }: { productId: number }) {
+export default function AddToCartButton({ productId, optionId }: { productId: number, optionId?: number }) {
   const [isLoading, setIsLoading] = useState(false)
 
   const addToCart = async () => {
-    setIsLoading(true)
-    // 여기에 실제 장바구니 추가 로직을 구현해야 합니다.
-    await new Promise(resolve => setTimeout(resolve, 1000)) // 임시 지연
-    setIsLoading(false)
-    alert('상품이 장바구니에 추가되었습니다.')
-  }
+    setIsLoading(true);
+    
+    try {
+      await cartApi.addToCart({
+        product: productId,
+        option: optionId || null,
+        quantity: 1, // 기본 수량 1개
+      });
+
+      alert('상품이 장바구니에 추가되었습니다.');
+    } catch (error) {
+      console.error('장바구니 추가 실패:', error);
+      alert('장바구니 추가에 실패했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <button

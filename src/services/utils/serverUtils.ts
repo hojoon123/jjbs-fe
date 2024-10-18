@@ -16,18 +16,15 @@ export const deleteToken = (tokenName: string) => {
 
 // accessToken을 갱신하는 함수
 export const refreshToken = async () => {
-  const refreshTokenValue = getToken('refresh_token');
   const response = await fetch(`${BASE_URL}/users/token/refresh/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ refresh: refreshTokenValue }),
     credentials: 'include',
   });
 
   if (!response.ok) {
-    
     throw new Error('토큰 갱신 실패');
   }
 
@@ -60,24 +57,4 @@ export const checkAndRefreshToken = async () => {
   }
 
   return accessToken;
-};
-
-// 토큰을 포함하여 fetch 요청을 처리하는 함수
-export const fetchWithToken = async (url: string, method: string, body?: any) => {
-  const token = await checkAndRefreshToken();
-  const options: RequestInit = {
-    method,
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
-    body: body ? JSON.stringify(body) : null,
-  };
-  const response = await fetch(url, options);
-  if (!response.ok) {
-    throw new Error(`요청 실패: ${response.status}`);
-  }
-
-  return response.json();
 };

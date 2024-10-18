@@ -1,9 +1,9 @@
-import { motion } from 'framer-motion'
-import Image from 'next/image'
-import { useState } from 'react'
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+import { useState } from 'react';
 
 interface ProductImagesProps {
-  images: string[]
+  images: Array<{ id: number; image: string }>;
 }
 
 export function ProductImages({ images }: ProductImagesProps) {
@@ -28,7 +28,7 @@ export function ProductImages({ images }: ProductImagesProps) {
             >
               <span className="sr-only">{index + 1}번 이미지 보기</span>
               <span className="absolute inset-0 overflow-hidden rounded-md">
-                <Image src={image} alt="" className="w-full h-full object-center object-cover" layout="fill" />
+                <Image src={image.image} alt="" className="w-full h-full object-center object-cover" layout="fill" />
               </span>
             </button>
           ))}
@@ -37,7 +37,7 @@ export function ProductImages({ images }: ProductImagesProps) {
 
       <div className="w-full aspect-w-1 aspect-h-1">
         <Image
-          src={images[selectedImage]}
+          src={images[selectedImage].image}
           alt="제품 이미지"
           className="w-full h-full object-center object-cover sm:rounded-lg"
           layout="fill"
