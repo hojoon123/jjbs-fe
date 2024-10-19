@@ -1,1 +1,1 @@
-export const BASE_URL = 'https://eager-tables-care.loca.lt'
+export const BASE_URL = 'https://junjunbari.loca.lt,'
