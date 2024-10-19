@@ -1,7 +1,7 @@
 import { ProfileData, UserData } from '../types/userData';
 import { fetchWithToken } from '../utils/clientUtils';
+import { BASE_URL } from '../utils/constants';
 
-const BASE_URL = 'https://3618-61-84-218-100.ngrok-free.app';
 export const userApi = {
   // 사용자 프로필 정보 가져오기
   getUserProfile: async (): Promise<UserData> => {
