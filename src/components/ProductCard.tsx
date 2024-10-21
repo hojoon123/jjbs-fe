@@ -1,6 +1,7 @@
-import { Product } from '@/services/types/product'
-import Image from 'next/image'
-import Link from 'next/link'
+'use client';
+import { Product } from '@/services/types/product';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function ProductCard({ product }: { product: Product }) {
   return (

@@ -1,3 +1,4 @@
+'use client';
 import { ProductInfoProps } from '@/services/types/product';
 import { Star } from 'lucide-react';
 

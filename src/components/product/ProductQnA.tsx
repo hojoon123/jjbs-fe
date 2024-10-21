@@ -1,3 +1,4 @@
+'use client';
 import { ProductQnAProps } from '@/services/types/product';
 
 export function ProductQnA({ qna }: ProductQnAProps) {

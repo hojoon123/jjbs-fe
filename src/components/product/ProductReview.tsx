@@ -1,3 +1,4 @@
+'use client';
 import { Review } from '@/services/types/reviews';
 
 interface ProductReviewProps {

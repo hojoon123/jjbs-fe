@@ -1,3 +1,5 @@
+'use client';
+
 import { productApi } from '@/services/api/productApi';
 import { Product } from '@/services/types/product';
 import ProductCard from './ProductCard';
