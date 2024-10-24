@@ -3,7 +3,7 @@ import { BASE_URL } from '../utils/constants';
 
 export const authApi = {
   signUp: async (userData: signUpData) => {
-    const response = await fetch(`${BASE_URL}/users/signup/`, {
+    const response = await fetch(`${BASE_URL}/users/register/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
