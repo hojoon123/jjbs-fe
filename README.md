@@ -1,5 +1,4 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
+기술 스택 : Next.js 14, typeScript, tailwind.css, 렌더링(ssr & csr), JWT
 ## Getting Started
 
 First, run the development server:
