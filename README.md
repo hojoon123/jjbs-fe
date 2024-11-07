@@ -1,4 +1,4 @@
-기술 스택 : Next.js 14, typeScript, tailwind.css, 렌더링(ssr & csr), JWT
+기술 스택 : Next.js 14, typeScript, tailwind.css, 렌더링(ssr & csr), JWT, Redux
 ## Getting Started
 
 First, run the development server:
