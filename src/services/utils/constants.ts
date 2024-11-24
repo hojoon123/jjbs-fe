@@ -1,1 +1,1 @@
-export const BASE_URL = 'https://mnuguide.site'
+export const BASE_URL = 'https://api.mnuguide.site'

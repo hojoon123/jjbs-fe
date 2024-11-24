@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers';
-const BASE_URL = 'https://3618-61-84-218-100.ngrok-free.app';
+const BASE_URL = 'https://api.mnuguide.site';
 
 // 쿠키에서 토큰을 가져오는 함수
 export const getToken = (tokenName: string) => {
