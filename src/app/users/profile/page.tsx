@@ -12,6 +12,7 @@ import { redirect } from 'next/navigation';
 export default async function MyPage() {
   // 토큰 유효성 체크 및 갱신
   const accessToken = await checkAndRefreshToken();
+  console.log('Access Token:', accessToken);
   // 토큰이 없으면 로그인 페이지로 리다이렉트
   if (!accessToken) {
     return redirect('/users/login');
