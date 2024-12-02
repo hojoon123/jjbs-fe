@@ -18,6 +18,8 @@ export const deleteToken = (tokenName: string) => {
 
 // accessToken을 갱신하는 함수
 export const refreshToken = async () => {
+  const refresh = getToken('refresh_token');
+
   try {
     console.log(`[DEBUG] refreshToken: 갱신 요청 시작`);
     const response = await fetch(`${BASE_URL}/users/token/refresh/`, {
@@ -26,6 +28,7 @@ export const refreshToken = async () => {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
+      body: JSON.stringify({ refresh }),
     });
 
     if (!response.ok) {
