@@ -39,7 +39,7 @@ export default function LoginForm() {
         return;
       }
       // 로그인 성공 후 유저 데이터 조회
-      const userProfile = await userApi.getUserProfile();
+      const userProfile = await userApi.loginGetUserProfile();
       
       // Redux 상태 업데이트
       dispatch(setUser(userProfile));

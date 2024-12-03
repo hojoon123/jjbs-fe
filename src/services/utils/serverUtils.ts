@@ -82,3 +82,22 @@ export const checkAndRefreshToken = async () => {
   console.log(`[DEBUG] checkAndRefreshToken: accessToken 유효. 기존 토큰 사용`);
   return accessToken;
 };
+
+export const fetchGetToken = async (url: string, method: string, body?: Record<string, unknown>) => {
+  const accessToken = getToken('access_token');
+  const options: RequestInit = {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(accessToken && { 'Authorization': `Bearer ${accessToken}` }),
+    },
+    credentials: 'include',
+    body: body ? JSON.stringify(body) : null,
+  };
+  const response = await fetch(url, options);
+  if (!response.ok) {
+    throw new Error(`요청 실패: ${response.status}`);
+  }
+
+  return response.json();
+};
