@@ -1,37 +1,17 @@
 'use client';
 
-import { setUser } from '@/redux/slices/userSlice';
 import { RootState } from '@/redux/store';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { EmailModal } from './profile/EmailModal';
 import { PasswordModal } from './profile/PasswordModal';
 
-interface UserProfile {
-  fullname: string;
-  email: string;
-  userprofile?: {
-    subscription_plan?: string;
-  };
-}
-
-interface ProfileSectionProps {
-  userData: UserProfile;
-}
-
-export function ProfileSection({ userData }: ProfileSectionProps) {
+export function ProfileSection() {
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
-
-  const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
   const router = useRouter();
-
-  // Redux에 프로필 정보를 저장
-  useEffect(() => {
-    dispatch(setUser(userData)); 
-  }, [userData, dispatch]);
 
   // 로그인 상태 체크 후 리다이렉트
   useEffect(() => {
