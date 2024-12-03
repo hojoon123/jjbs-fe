@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../redux/slices/userSlice';
 import { authApi } from '../services/api/authApi';
-import { userApi } from '../services/api/userApi';
+import { userApi } from '../services/api/clientUserApi';
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -39,7 +39,7 @@ export default function LoginForm() {
         return;
       }
       // 로그인 성공 후 유저 데이터 조회
-      const userProfile = await userApi.loginGetUserProfile();
+      const userProfile = await userApi.getUserProfile();
       
       // Redux 상태 업데이트
       dispatch(setUser(userProfile));

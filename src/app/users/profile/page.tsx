@@ -51,7 +51,7 @@ import { ProfileSection } from '@/components/mypage/ProfileSection';
 import { SettingsSection } from '@/components/mypage/SettingsSection';
 import { ShippingAddressSection } from '@/components/mypage/ShippingAddressSection';
 import { WishlistSection } from '@/components/mypage/WishlistSection';
-import { userApi } from '@/services/api/userApi';
+import { userApi } from '@/services/api/serverUserApi';
 import { checkAndRefreshToken } from '@/services/utils/serverUtils';
 
 export default async function MyPage() {
