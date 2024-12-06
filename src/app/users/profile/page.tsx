@@ -22,13 +22,16 @@ export default async function MyPage() {
     try {
       await userApi.updateUserProfile({ email });
       alert('이메일이 성공적으로 변경되었습니다.');
-    } catch (error: any) {
-      if (error.response?.status === 400) {
-        // 서버에서 중복된 이메일 에러 반환 시 처리
-        const errorMessage = error.response?.data?.email?.[0];
-        if (errorMessage && errorMessage.includes('already exists')) {
-          alert('이미 존재하는 이메일입니다.');
-          return;
+    } catch (err) {
+      if (typeof err === 'object' && err !== null && 'response' in err) {
+        const error = err as { response: { status: number; data: { email?: string[] } } };
+  
+        if (error.response.status === 400) {
+          const errorMessage = error.response.data?.email?.[0];
+          if (errorMessage && errorMessage.includes('already exists')) {
+            alert('이미 존재하는 이메일입니다.');
+            return;
+          }
         }
       }
       // 기타 에러 처리
