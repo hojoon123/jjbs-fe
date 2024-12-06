@@ -37,7 +37,7 @@ export function ProfileSection() {
       <CardContent className="space-y-4">
         <div className="space-y-2">
           <Label>이름</Label>
-          <div className="font-medium">{user.first_name} {user.last_name}</div>
+          <div className="font-medium">{user.first_name}{user.last_name}</div>
         </div>
         <div className="space-y-2">
           <Label>이메일</Label>
