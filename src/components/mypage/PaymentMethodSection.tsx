@@ -15,7 +15,7 @@ export function PaymentMethodSection({ primaryPaymentMethod }: PaymentMethodSect
 
           결제 수단
         </CardTitle>
-        <CardDescription>결제 카드 및 계좌 관리</CardDescription>
+        <CardDescription>결제 카드 및 계좌를 등록하여 편리하게 주문하세요</CardDescription>
       </CardHeader>
       <CardContent>
         <p><strong>기본 결제 수단:</strong> {primaryPaymentMethod}</p>

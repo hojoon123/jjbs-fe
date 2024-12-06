@@ -10,15 +10,16 @@ interface EmailModalProps {
   isOpen: boolean;
   onClose: () => void;
   currentEmail: string;
+  onSubmit: (email: string) => Promise<void>;
 }
 
-export function EmailModal({ isOpen, onClose, currentEmail }: EmailModalProps) {
+export function EmailModal({ isOpen, onClose, currentEmail, onSubmit }: EmailModalProps) {
   const [email, setEmail] = useState(currentEmail);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // 이메일 변경 로직 추가
-    console.log('이메일 변경 요청:', email);
+    await onSubmit(email);
     alert("이메일 변경 요청이 전송되었습니다. 새 이메일로 확인 링크를 보냈습니다.");
     onClose();
   };

@@ -18,10 +18,15 @@ export interface signUpData {
 }
 
 export interface ProfileData {
-  first_name: string;
-  last_name: string;
-  username: string;
-  email: string;
+  first_name?: string;
+  last_name?: string;
+  username?: string;
+  email?: string;
+  [key: string]: string | undefined;
+}
+
+export interface PasswordChangeData {
+  password: string;
   [key: string]: string;
 }
 

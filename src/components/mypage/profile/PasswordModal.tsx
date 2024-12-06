@@ -9,14 +9,15 @@ import { useState } from 'react';
 interface PasswordModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSubmit: (newPassword: string) => Promise<void>;
 }
 
-export function PasswordModal({ isOpen, onClose }: PasswordModalProps) {
+export function PasswordModal({ isOpen, onClose, onSubmit }: PasswordModalProps) {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword.length < 8) {
       alert("새 비밀번호는 8자 이상이어야 합니다.");
@@ -27,7 +28,7 @@ export function PasswordModal({ isOpen, onClose }: PasswordModalProps) {
       return;
     }
     // 여기에 비밀번호 변경 로직 추가
-    console.log('비밀번호 변경 요청:', { currentPassword, newPassword });
+    await onSubmit(newPassword);
     alert("비밀번호가 성공적으로 변경되었습니다.");
     onClose();
   };

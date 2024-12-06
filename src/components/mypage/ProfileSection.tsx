@@ -10,7 +10,15 @@ import { useSelector } from 'react-redux';
 import { EmailModal } from './profile/EmailModal';
 import { PasswordModal } from './profile/PasswordModal';
 
-export function ProfileSection() {
+interface ProfileSectionProps {
+  onUpdateEmail: (email: string) => Promise<void>;
+  onChangePassword: (newPassword: string) => Promise<void>;
+}
+
+export function ProfileSection({
+  onUpdateEmail,
+  onChangePassword,
+}: ProfileSectionProps) {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
   const user = useSelector((state: RootState) => state.user);
@@ -63,10 +71,12 @@ export function ProfileSection() {
         isOpen={showEmailModal}
         onClose={() => setShowEmailModal(false)}
         currentEmail={user.email || ''}
+        onSubmit={onUpdateEmail}
       />
       <PasswordModal 
         isOpen={showPasswordModal} 
         onClose={() => setShowPasswordModal(false)} 
+        onSubmit={onChangePassword}
       />
     </Card>
   );

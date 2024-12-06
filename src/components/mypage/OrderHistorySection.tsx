@@ -14,7 +14,7 @@ export function OrderHistorySection({ orderCount }: OrderHistorySectionProps) {
         <CardTitle className="flex items-center">
           주문 내역
         </CardTitle>
-        <CardDescription>최근 주문 및 배송 현황</CardDescription>
+        <CardDescription>최근 주문 및 배송 현황을 조회하세요</CardDescription>
       </CardHeader>
       <CardContent>
         <p>총 {orderCount}개의 주문</p>

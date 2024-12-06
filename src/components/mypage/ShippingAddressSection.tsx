@@ -15,7 +15,7 @@ export function ShippingAddressSection({ primaryAddress }: ShippingAddressSectio
 
           배송지 관리
         </CardTitle>
-        <CardDescription>배송지 추가 및 수정</CardDescription>
+        <CardDescription>배송지를 추가하여 편리하게 배송 받으세요</CardDescription>
       </CardHeader>
       <CardContent>
         <p><strong>기본 배송지:</strong> {primaryAddress}</p>
