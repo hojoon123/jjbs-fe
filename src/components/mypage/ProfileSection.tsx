@@ -2,7 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RootState } from '@/redux/store';
 import { useState } from 'react';
@@ -32,7 +32,7 @@ export function ProfileSection() {
     <Card className="h-full">
       <CardHeader>
         <CardTitle>프로필</CardTitle>
-        <CardDescription>개인 정보 관리</CardDescription>
+        <CardDescription>개인 정보를 관리하고 업데이트하세요</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
@@ -42,25 +42,9 @@ export function ProfileSection() {
         <div className="space-y-2">
           <Label>이메일</Label>
           <div className="font-medium">{user.email}</div>
-          <Button 
-            variant="link" 
-            className="p-0 h-auto font-normal text-blue-600"
-            onClick={() => setShowEmailModal(true)}
-          >
-            이메일 변경
-          </Button>
         </div>
         <div className="space-y-2">
           <Label>비밀번호</Label>
-          <div>
-            <Button 
-              variant="link" 
-              className="p-0 h-auto font-normal text-blue-600"
-              onClick={() => setShowPasswordModal(true)}
-            >
-              비밀번호 변경
-            </Button>
-          </div>
         </div>
         <div className="pt-2">
           <Badge className={getSubscriptionColor(user.userprofile?.subscription_plan || 'free')}>
@@ -68,6 +52,12 @@ export function ProfileSection() {
           </Badge>
         </div>
       </CardContent>
+      <CardFooter className="flex gap-4">
+          <Button onClick={() => setShowEmailModal(true)}>이메일 변경</Button>
+          <Button variant="outline" onClick={() => setShowPasswordModal(true)}>
+            비밀번호 변경
+          </Button>
+      </CardFooter>
 
       <EmailModal 
         isOpen={showEmailModal}
