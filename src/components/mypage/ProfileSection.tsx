@@ -1,5 +1,10 @@
 'use client';
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { RootState } from '@/redux/store';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -8,12 +13,11 @@ import { EmailModal } from './profile/EmailModal';
 import { PasswordModal } from './profile/PasswordModal';
 
 export function ProfileSection() {
-  const [showEmailModal, setShowEmailModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [showEmailModal, setShowEmailModal] = useState(false);
   const user = useSelector((state: RootState) => state.user);
   const router = useRouter();
 
-  // 로그인 상태 체크 후 리다이렉트
   useEffect(() => {
     if (!user.isAuthenticated) {
       router.push('/users/login');
@@ -34,22 +38,49 @@ export function ProfileSection() {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold mb-4">프로필</h2>
-      <div className="mb-4">
-        <p className="font-medium">이름: {user.first_name} {user.last_name}</p>
-        <p className="text-gray-600">이메일: {user.email}</p>
-        <button onClick={() => setShowEmailModal(true)} className="text-blue-600 hover:underline">이메일 수정</button>
-      </div>
-      <div className="mb-4">
-        <span className={`px-2 py-1 rounded-full text-sm font-medium ${getSubscriptionColor(user.userprofile?.subscription_plan || 'free')}`}>
-          {(user.userprofile?.subscription_plan || 'free').toUpperCase()}
-        </span>
-      </div>
-      <button onClick={() => setShowPasswordModal(true)} className="text-blue-600 hover:underline">비밀번호 수정</button>
-      {/* 이메일 및 비밀번호 수정 모달 */}
-      {showEmailModal && <EmailModal closeModal={() => setShowEmailModal(false)} />}
-      {showPasswordModal && <PasswordModal closeModal={() => setShowPasswordModal(false)} />}
+    <div className="max-w-6xl mx-auto p-4 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <Card className="col-span-full md:col-span-1">
+        <CardHeader>
+          <CardTitle>프로필</CardTitle>
+          <CardDescription>개인 정보를 관리하고 업데이트하세요</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label>이름</Label>
+            <div className="font-medium">{user.first_name} {user.last_name}</div>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="email">이메일</Label>
+            <Input
+              id="email"
+              type="email"
+              value={user.email}
+              readOnly
+            />
+          </div>
+          <div className="pt-2">
+            <Badge className={getSubscriptionColor(user.userprofile?.subscription_plan || 'free')}>
+              {(user.userprofile?.subscription_plan || 'free').toUpperCase()}
+            </Badge>
+          </div>
+        </CardContent>
+        <CardFooter className="flex gap-4">
+          <Button onClick={() => setShowEmailModal(true)}>이메일 변경</Button>
+          <Button variant="outline" onClick={() => setShowPasswordModal(true)}>
+            비밀번호 변경
+          </Button>
+        </CardFooter>
+      </Card>
+
+      <EmailModal 
+        isOpen={showEmailModal}
+        onClose={() => setShowEmailModal(false)}
+        currentEmail={user.email || ""}
+      />
+      <PasswordModal 
+        isOpen={showPasswordModal} 
+        onClose={() => setShowPasswordModal(false)} 
+      />
     </div>
   );
 }
