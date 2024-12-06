@@ -1,4 +1,5 @@
 'use client';
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from 'next/link';
 
@@ -17,10 +18,10 @@ export function WishlistSection({ wishlistCount }: WishlistSectionProps) {
       </CardHeader>
       <CardContent>
         <p>{wishlistCount}개의 찜한 상품</p>
-        <Link href="/users/profile/wishlist" className="text-blue-500 hover:underline">
-          찜 목록 보기
+        <Link href="/users/profile/wishlist">
+          <Button className="mt-4">찜 목록 보기</Button>
         </Link>
       </CardContent>
     </Card>
-  )
+  );
 }
