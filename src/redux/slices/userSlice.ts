@@ -25,9 +25,9 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<Partial<UserData>>) => {
-      const { last_name, first_name, userprofile, email } = action.payload;
-      state.first_name = first_name;
-      state.last_name = last_name;
+      const { first_name, last_name, userprofile, email } = action.payload;
+      state.first_name = last_name;
+      state.last_name = first_name;
       state.userprofile = {
         ...state.userprofile,
         subscription_plan: userprofile?.subscription_plan,
